@@ -14,11 +14,11 @@ class CheckpointService:
     def clear_state(self, task_graph_id: str):
         self.state_checkpoint[task_graph_id] = None
 
-    def save_message(self, message: Dict[str, Any]):
-        if self.message_checkpoint.get(id) is not None:
-            self.message_checkpoint[id].append(message)
+    def save_message(self, checkpoint_id: str, message: Dict[str, Any]):
+        if self.message_checkpoint.get(checkpoint_id) is not None:
+            self.message_checkpoint[checkpoint_id].append(message)
         else:
-            self.message_checkpoint[id] = [message]
+            self.message_checkpoint[checkpoint_id] = [message]
 
     def get_message(self, id: str) -> Dict[str, Any]:
         return self.message_checkpoint.get(id, None)

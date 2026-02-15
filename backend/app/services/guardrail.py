@@ -102,6 +102,6 @@ class GuardrailService:
     
     def check_output_query(self, query: str, state: AgentState) -> str:
         chain = self.validate_output_query | self.llm | JsonOutputParser()
-        return chain.invoke({"query": query, "last_response": state["final_answer"], "evidance": state["collected_evidence"]})
+        return chain.invoke({"query": query, "last_response": state.final_answer, "evidance": state.collected_evidence})
     
     

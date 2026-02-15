@@ -13,6 +13,7 @@ class ExecutionStatus(str, Enum):
     FAILED = "failed"
     SUCCESS = "success"
     RETRY = "retry"
+    RETRYING = "retrying"
     PENDING = "pending"
     INVALID = "invalid"
     UNSAFE = "unsafe"

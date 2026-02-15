@@ -46,12 +46,11 @@ async def process_message(
         logger.info(f"Final state: check completed tasks {final_state}", "chat_router/process_message")
         
         # Extract final answer from conversation results
-        final_answer = final_state["final_answer"]
+        final_answer = final_state.final_answer
         answer = get_guardrail().check_output_query(chat_message.message, final_state)
-        print(answer)
-        if answer["status"] == "VALID":
+        if answer.get("status") == "VALID":
             logger.info(f"Final answer: {final_state}", "chat_router/process_message")
-            final_answer = final_state["final_answer"]
+            final_answer = final_state.final_answer
         else:
             final_answer = "I apologize, I couldn't process your request."
         # Create response
@@ -59,7 +58,7 @@ async def process_message(
             id=str(uuid.uuid4()),
             message=chat_message.message,
             response=final_answer,
-            task_graph=final_state["task_graph"]  # Use the final state's task graph
+            task_graph=final_state.task_graph
         )
         
         # Store in chat history

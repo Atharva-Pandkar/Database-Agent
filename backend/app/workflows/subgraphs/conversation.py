@@ -1,4 +1,3 @@
-from typing import Tuple
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph
 
@@ -7,8 +6,8 @@ from app.workflows.base import BaseNode
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
+
 class DraftAnswer(BaseNode):
-    
     system_prompt_general = """
     You are a helpful assistant that can answer questions and help with tasks.
     Your job is to given an answer to the user's question.
@@ -18,12 +17,8 @@ class DraftAnswer(BaseNode):
     Your answer should answer the user's query based on the complied answers and evidence.
     Only give your answer in string format.
     If it is a general question, answer in a sentence and add you are here to help with game queries.
-     
-    
     """
-    
-    
-    
+
     @staticmethod
     async def process(state: AgentState, config: RunnableConfig) -> AgentState:
         load_dotenv()
@@ -34,7 +29,7 @@ class DraftAnswer(BaseNode):
                 evidance += f"{key}: {value}\n"
         prompt = DraftAnswer.system_prompt_general.format(question=state.task_graph.query,
                                                    evidence=evidance)
-        
+
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
@@ -44,8 +39,7 @@ class DraftAnswer(BaseNode):
         )
         state.current_task.result = response.choices[0].message.content
         state.final_answer = response.choices[0].message.content
-        
-        
+        state.current_task.status = ExecutionStatus.SUCCESS
         return state
 
 class CitationAdder(BaseNode):
@@ -64,8 +58,7 @@ class CitationAdder(BaseNode):
     
     """
     @staticmethod
-    async def process(state: AgentState, config: RunnableConfig) -> Tuple[str, AgentState]:
-        # TODO: Implement citation addition logic
+    async def process(state: AgentState, config: RunnableConfig) -> AgentState:
         load_dotenv()
         evidance = ""
         for x in state.collected_evidence:

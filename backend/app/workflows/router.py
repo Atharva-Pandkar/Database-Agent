@@ -28,8 +28,8 @@ class Router(BaseNode):
         if state.current_task is None:
             return True
         
-        # Task is completed, can proceed
-        if state.current_task.status == ExecutionStatus.COMPLETED:
+        # Task is completed, can proceed (subgraphs use SUCCESS or COMPLETED)
+        if state.current_task.status in (ExecutionStatus.COMPLETED, ExecutionStatus.SUCCESS):
             return True
         
         # Task is still running
